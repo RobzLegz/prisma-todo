@@ -38,6 +38,37 @@ const todoCtrl = {
             return res.status(500).json({ err: err.message });
         }
     },
+    update: async (req: NextApiRequest, res: NextApiResponse) => {
+        try {
+            const todoId = req.query.id;
+            const {
+                title,
+                description,
+            }: { title?: string; description?: string } = req.body;
+
+            const updatedTodo = await prisma?.task.update({
+                where: { id: Number(todoId) },
+                data: { title, description },
+            });
+
+            res.json({ msg: 'Update success', updatedTodo });
+        } catch (err: any) {
+            return res.status(500).json({ err: err.message });
+        }
+    },
+    deleteOne: async (req: NextApiRequest, res: NextApiResponse) => {
+        try {
+            const todoId = req.query.id;
+
+            await prisma?.task.delete({
+                where: { id: Number(todoId) },
+            });
+
+            res.json({ msg: 'Delete success' });
+        } catch (err: any) {
+            return res.status(500).json({ err: err.message });
+        }
+    },
 };
 
 export default todoCtrl;

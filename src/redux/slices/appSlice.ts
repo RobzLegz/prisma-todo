@@ -35,10 +35,47 @@ export const appSlice = createSlice({
 
             return state;
         },
+        deleteTodoRdx: (state, action) => {
+            let newTodos: Todo[] = [];
+
+            if (state.todos) {
+                newTodos = state.todos.filter(
+                    (todo) => todo.id !== action.payload
+                );
+            }
+
+            state = {
+                ...state,
+                todos: [...newTodos, action.payload],
+            };
+
+            return state;
+        },
+        updateTodoRdx: (state, action) => {
+            let newTodos: Todo[] = [];
+
+            if (state.todos) {
+                newTodos = state.todos.map((todo) => {
+                    if (todo.id === action.payload.id) {
+                        return action.payload;
+                    }
+
+                    return todo;
+                });
+            }
+
+            state = {
+                ...state,
+                todos: newTodos,
+            };
+
+            return state;
+        },
     },
 });
 
-export const { setTodos, createNewTodoRdx } = appSlice.actions;
+export const { setTodos, createNewTodoRdx, deleteTodoRdx, updateTodoRdx } =
+    appSlice.actions;
 
 export const selectApp = (state: any) => state.app;
 
